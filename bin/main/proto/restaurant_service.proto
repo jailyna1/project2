@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package com.restaurant.grpc;
+
+option java_multiple_files = true;
+option java_package = "com.restaurant.grpc.generated";
+option java_outer_classname = "RestaurantService";
+
+import "restaurant_messages.proto";
+
+// Manager Service
+service ManagerService {
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc ListMenu(ListMenuRequest) returns (ListMenuResponse);
+    rpc AdjustPrice(AdjustPriceRequest) returns (AdjustPriceResponse);
+    rpc Logout(GenericResponse) returns (GenericResponse);
+}
+
+// Server/Client Service
+service ServerService {
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc ListMenu(ListMenuRequest) returns (ListMenuResponse);
+    rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+    rpc PlaceTakeoutOrder(PlaceTakeoutOrderRequest) returns (PlaceTakeoutOrderResponse);
+    rpc PlaceDineinOrder(PlaceDineinOrderRequest) returns (PlaceDineinOrderResponse);
+    rpc ShowBill(ShowBillRequest) returns (ShowBillResponse);
+    rpc Logout(GenericResponse) returns (GenericResponse);
+}
+
+// Chef Service
+service ChefService {
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+    rpc MarkOrderReady(ShowBillRequest) returns (GenericResponse);  // ShowBillRequest reused for order_id
+    rpc Logout(GenericResponse) returns (GenericResponse);
+}

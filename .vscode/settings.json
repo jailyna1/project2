@@ -1,0 +1,11 @@
+{
+    "java.project.sourcePaths": [
+        "com/restaurant/server",
+        "com/restaurant/client",
+        "src"
+    ],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "c:\\Users\\jaily\\Documents\\ECE 470\\ece470\\proj1\\proj1\\lib\\gson-2.10.1.jar"
+    ]
+}

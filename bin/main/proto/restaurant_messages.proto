@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package com.restaurant.grpc;
+
+option java_multiple_files = true;
+option java_package = "com.restaurant.grpc.generated";
+option java_outer_classname = "RestaurantMessages";
+
+// Menu Item
+message MenuItemMessage {
+    string name = 1;
+    string category = 2;
+    double price = 3;
+}
+
+// Order Line
+message OrderLineMessage {
+    MenuItemMessage item = 1;
+    int32 quantity = 2;
+}
+
+// Order Status enum
+enum OrderStatus {
+    PENDING = 0;
+    READY = 1;
+    COMPLETED = 2;
+}
+
+// Order
+message OrderMessage {
+    int32 id = 1;
+    string customer_name = 2;
+    string order_type = 3;  // DINE_IN or TAKEOUT
+    repeated OrderLineMessage lines = 4;
+    OrderStatus status = 5;
+}
+
+// Login Request
+message LoginRequest {
+    string user = 1;
+    string pass = 2;
+}
+
+// Login Response
+message LoginResponse {
+    bool authenticated = 1;
+    string message = 2;
+}
+
+// List Menu Request
+message ListMenuRequest {
+}
+
+// List Menu Response
+message ListMenuResponse {
+    repeated MenuItemMessage items = 1;
+}
+
+// Adjust Price Request
+message AdjustPriceRequest {
+    string item_name = 1;
+    double new_price = 2;
+}
+
+// Adjust Price Response
+message AdjustPriceResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// Place Takeout Order Request
+message PlaceTakeoutOrderRequest {
+    string customer_name = 1;
+    repeated string item_names = 2; 
+}
+
+// Place Takeout Order Response
+message PlaceTakeoutOrderResponse {
+    bool success = 1;
+    string message = 2;
+    int32 order_id = 3;
+}
+
+// Guest Order
+message GuestOrder {
+    string customer_name = 1;
+    repeated string item_names = 2;  
+}
+
+// Place Dinein Order Request
+message PlaceDineinOrderRequest {
+    repeated GuestOrder guests = 1;  
+}
+
+// Place Dinein Order Response
+message PlaceDineinOrderResponse {
+    bool success = 1;
+    string message = 2;
+    repeated int32 order_ids = 3;
+}
+
+// List Orders Request
+message ListOrdersRequest {
+}
+
+// List Orders Response
+message ListOrdersResponse {
+    repeated OrderMessage orders = 1;
+}
+
+// Show Bill Request
+message ShowBillRequest {
+    int32 order_id = 1;
+}
+
+// Show Bill Response
+message ShowBillResponse {
+    bool success = 1;
+    string bill = 2;
+}
+
+// Generic Response
+message GenericResponse {
+    bool success = 1;
+    string message = 2;
+}

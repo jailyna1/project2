@@ -52,7 +52,7 @@ public class ChefGrpcImpl extends ChefServiceGrpc.ChefServiceImplBase {
             OrderMessage.Builder orderBuilder = OrderMessage.newBuilder()
                     .setId(order.getId())
                     .setCustomerName(order.getCustomerName())
-                    .setOrderType(order.getOrderType())
+                    .setOrderType(order.getType().toString())
                     .setStatus(mapOrderStatus(order.getStatus()));
 
             for (OrderLine line : order.getLines()) {

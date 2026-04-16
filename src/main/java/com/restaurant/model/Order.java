@@ -17,6 +17,8 @@ public class Order {
     private boolean notified;
     private final List<OrderLine> lines = new ArrayList<>();
 
+    private int counter = 0;
+
     public Order(Type type) {
         this.id = nextId++;
         this.type = type;
@@ -53,12 +55,10 @@ public class Order {
         return total;
     }
 
-    public String getOrderType() {
-        return type == Type.DINE_IN ? "DINE_IN" : "TAKEOUT";
-    }
 
     @Override
     public String toString() {
         return "Order #" + id + "[" + type + "|" + status + "]";
     }
 }
+

@@ -27,19 +27,21 @@ public class RestaurantGrpcServer {
                 .addService(new ManagerGrpcImpl(menuService, dataStore, orderService))
                 .addService(new ServerGrpcImpl(menuService, orderService, dataStore))
                 .addService(new ChefGrpcImpl(orderService, menuService, dataStore))
+                .addService(new CommandGrpcImpl(menuService, dataStore, orderService))
                 .build()
                 .start();
 
         System.out.println("Restaurant gRPC Server started on port " + port);
+        System.out.println("Waiting for clients to connect...");
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.err.println("*** shutting down gRPC server since JVM is shutting down");
+            System.err.println("--> Shutting down gRPC server - JVM is shutting down");
             try {
                 RestaurantGrpcServer.this.stop();
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             }
-            System.err.println("*** server shut down");
+            System.err.println("--> Server shut down");
         }));
     }
 
@@ -56,7 +58,7 @@ public class RestaurantGrpcServer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        int port = 50051;
+        int port = 5000;  
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }

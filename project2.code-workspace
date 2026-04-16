@@ -1,0 +1,36 @@
+//Since we are combining our code, can come back to this once we both compile 
+
+// {
+// 	"folders": [
+// 		{
+// 			"name": "project2",
+// 			"path": "."
+// 		},
+// 		{
+// 			"name": "bin",
+// 			"path": "../ece470/proj1/bin"
+// 		},
+// 		{
+// 			"name": "apache-maven-3.9.14",
+// 			"path": "../ece470/proj1/apache-maven-3.9.14"
+// 		},
+// 		{
+// 			"name": ".vscode",
+// 			"path": "../ece470/proj1/.vscode"
+// 		},
+// 		{
+// 			"name": "data",
+// 			"path": "../ece470/proj1/data"
+// 		},
+// 		{
+// 			"name": "lib",
+// 			"path": "../ece470/proj1/lib"
+// 		},
+// 		{
+// 			"name": "src",
+// 			"path": "../ece470/proj1/src"
+// 		}
+// 	],
+// 	"settings": {}
+// }
+/

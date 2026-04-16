@@ -52,6 +52,7 @@ public class DataStore {
         menu.addItem(new MenuItem("Chocolate Mousse", "Desserts", 6.50));
         menu.addItem(new MenuItem("Coffee", "Drinks", 2.75));
         menu.addItem(new MenuItem("Lemonade", "Drinks", 3.25));
+
     }
 
     private void saveMenu() {

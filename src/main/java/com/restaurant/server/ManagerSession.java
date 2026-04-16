@@ -58,8 +58,8 @@ public class ManagerSession {
 
                     if (authenticate(user, pass)) {
                         authenticated = true;
-                        System.out.println("Able to authenticate user as manager");
-                        return "Logged in as MANAGER";
+                        System.out.println("Able to authenticate user as manager. Client connected.");
+                        return "Logged in as MANAGER. Welcome!\nAvailable commands: \nLIST_MENU\nADJUST_PRICE <item> <new_price>\nAVAILABLE_COMMANDS\nLOGOUT\nEXIT";
                     } else {
                         return "Error invalid credentials";
                     }

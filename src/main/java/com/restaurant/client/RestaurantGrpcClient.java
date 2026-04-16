@@ -20,12 +20,7 @@ public class RestaurantGrpcClient {
     }
 
     public void start() {
-        System.out.println("WELCOME TO RESTAURANT X. Please LOGIN with: LOGIN <user> <pass>");
-        System.out.println("Available commands after login:");
-        System.out.println("- Server: LISTMENU, PLACEORDER, LISTORDERS, SHOWBILL, LOGOUT");
-        System.out.println("- Manager: LISTMENU, ADJUSTPRICE, LOGOUT");
-        System.out.println("- Chef: LISTORDERS, MARKREADY, LOGOUT");
-        System.out.println();
+        System.out.println("WELCOME TO RESTAURANT X. Please LOGIN with: LOGIN <user> <pass>. User options: manager, server, chef");
 
         Scanner scanner = new Scanner(System.in);
         String line;

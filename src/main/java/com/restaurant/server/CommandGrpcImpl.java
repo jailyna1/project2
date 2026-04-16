@@ -80,7 +80,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
                                 String serverResponse = serverSession.get().processCommand(line);
                                 if (serverSession.get().isAuthenticated()) {
                                     currentSession.set(serverSession.get());
-                                    return "Welcome Server! " + serverResponse;
+                                    return serverResponse;
                                 }
                                 return serverResponse;
 
@@ -88,7 +88,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
                                 String managerResponse = managerSession.get().processCommand(line);
                                 if (managerSession.get().isAuthenticated()) {
                                     currentSession.set(managerSession.get());
-                                    return "Welcome Manager! " + managerResponse;
+                                    return managerResponse;
                                 }
                                 return managerResponse;
 

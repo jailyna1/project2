@@ -1,6 +1,11 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+TO RUN FOLLOW THESE INSTRUCTIONS:
+1. Terminal 1 - run:
+    - apache-maven-3.9.14\bin\mvn.cmd clean compile
+    - apache-maven-3.9.14\bin\mvn.cmd exec:java -D"exec.mainClass=com.restaurant.server.RestaurantGrpcServer"
+2. Terminal 2 - run: 
+    - apache-maven-3.9.14\bin\mvn.cmd exec:java -D"exec.mainClass=com.restaurant.client.RestaurantGrpcClient"
 
 ## Folder Structure
 
@@ -8,10 +13,10 @@ The workspace contains two folders by default, where:
 
 - `src`: the folder to maintain sources
 - `lib`: the folder to maintain dependencies
+- `data`: the folder to maintain hard copies of data
 
 Meanwhile, the compiled output files will be generated in the `bin` folder by default.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
 
 ## Dependency Management
 

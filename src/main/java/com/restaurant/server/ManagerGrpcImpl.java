@@ -60,6 +60,30 @@ public class ManagerGrpcImpl extends ManagerServiceGrpc.ManagerServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    //modify this to list employees instead of menu items
+    // @Override
+    // public void listEmployees(ListMenuRequest request, StreamObserver<ListMenuResponse> responseObserver) {
+    //     if (!authenticated) {
+    //         responseObserver.onError(new RuntimeException("Not authenticated. Use LOGIN first."));
+    //         return;
+    //     }
+
+    //     List<MenuItem> items = menuService.listAll();
+    //     ListMenuResponse.Builder builder = ListMenuResponse.newBuilder();
+
+    //     for (MenuItem item : items) {
+    //         MenuItemMessage msg = MenuItemMessage.newBuilder()
+    //                 .setName(item.getName())
+    //                 .setCategory(item.getCategory())
+    //                 .setPrice(item.getPrice())
+    //                 .build();
+    //         builder.addItems(msg);
+    //     }
+
+    //     responseObserver.onNext(builder.build());
+    //     responseObserver.onCompleted();
+    // }
+
     @Override
     public void adjustPrice(AdjustPriceRequest request, StreamObserver<AdjustPriceResponse> responseObserver) {
         if (!authenticated) {

@@ -29,7 +29,7 @@ public class ServerGrpcImpl extends ServerServiceGrpc.ServerServiceImplBase {
         boolean auth = authenticate(request.getUser(), request.getPass());
         LoginResponse response = LoginResponse.newBuilder()
                 .setAuthenticated(auth)
-                .setMessage(auth ? "Logged in as SERVER" : "Error invalid credentials")
+                .setMessage(auth ? "Logged in" : "Error invalid credentials")
                 .build();
 
         if (auth) {
@@ -77,7 +77,7 @@ public class ServerGrpcImpl extends ServerServiceGrpc.ServerServiceImplBase {
             OrderMessage.Builder orderBuilder = OrderMessage.newBuilder()
                     .setId(order.getId())
                     .setCustomerName(order.getCustomerName())
-                    .setOrderType(order.getOrderType())
+                    .setOrderType(order.getType().toString())
                     .setStatus(mapOrderStatus(order.getStatus()));
 
             for (OrderLine line : order.getLines()) {

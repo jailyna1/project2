@@ -13,7 +13,8 @@ public class MenuItem {
 
     public String getName() { return name; }
     public String getCategory() { return category; }
-    public double getPrice() { return price; }
+    public String getPrice() { return String.format("%.2f", price); }
+    public double getPriceValue() { return price; }
     public void setPrice(double price) { this.price = price; }
 
     @Override

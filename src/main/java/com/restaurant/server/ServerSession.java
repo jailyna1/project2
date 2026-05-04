@@ -5,6 +5,7 @@ import com.restaurant.model.MenuItem;
 import com.restaurant.model.Order;
 import com.restaurant.service.MenuService;
 import com.restaurant.service.OrderService;
+import com.restaurant.service.UserService;
 import com.restaurant.service.DataStore;
 
 import java.util.ArrayList;
@@ -15,13 +16,15 @@ public class ServerSession {
 
     private final MenuService menuService;
     private final OrderService orderService;
+    private final UserService userService;
     private final DataStore dataStore;
     private final Gson gson = new Gson();
     private boolean authenticated = false;
 
-    public ServerSession(MenuService menuService, OrderService os, DataStore dataStore) {
+    public ServerSession(MenuService menuService, OrderService os, DataStore dataStore, UserService us) {
         this.menuService = menuService;
         this.orderService = os;
+        this.userService = us;
         this.dataStore = dataStore;
     }
 

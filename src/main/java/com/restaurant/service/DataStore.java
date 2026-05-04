@@ -12,6 +12,7 @@ import java.util.List;
 public class DataStore {
     private final Menu menu = new Menu();
     private final List<Order> orders = new ArrayList<>();
+    private final List<User> staff = new ArrayList<>();
     private final Gson gson = new Gson();
     private final String dataDir = "data";
 
@@ -19,6 +20,7 @@ public class DataStore {
         ensureDir();
         loadMenu();
         loadOrders();
+        loadStaff();
     }
 
     private void ensureDir() {
@@ -83,13 +85,43 @@ public class DataStore {
         }
     }
 
-    public void updateMenuItemPrice(String itemName, double newPrice) {
+    public void updateMenuItemPrice(String itemName, String newPrice) {
         for (MenuItem m : menu.listAll()) {
             if (m.getName().equals(itemName)) {
-                m.setPrice(newPrice);
+                m.setPrice(Double.parseDouble(newPrice));
                 saveMenu();
                 return;
             }
+        }
+    }
+
+    private void loadStaff() {
+        File f = new File(dataDir, "staff.json");
+        if (!f.exists()) {
+            seedStaff();
+            saveStaff();
+            return ;
+        }
+        try (Reader r = new FileReader(f)) {
+            Type type = new TypeToken<List<User>>(){}.getType();
+            List<User> list = gson.fromJson(r, type);
+            if (list != null) staff.addAll(list);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load staff", e);
+        }
+    }
+
+    private void seedStaff() {
+        staff.add(new User("managerCurr", "password", User.Role.MANAGER));
+        staff.add(new User("serverCurr", "password", User.Role.SERVER));
+        staff.add(new User("chefCurr", "password", User.Role.CHEF));
+    }
+
+    public void saveStaff() {
+        try (Writer s = new FileWriter(new File(dataDir, "staff.json"))) {
+            s.write(gson.toJson(staff));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save staff", e);
         }
     }
 
@@ -98,6 +130,10 @@ public class DataStore {
     }
     public List<Order> getOrders() { 
         return orders; 
+    }
+
+    public List<User> getStaff() { 
+        return staff;
     }
 
     public static DataStore getInstance() {

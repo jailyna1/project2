@@ -1,24 +1,54 @@
 package com.restaurant.service;
 
-import com.restaurant.model.*;
+import java.util.List;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.restaurant.model.User;
+import com.restaurant.service.DataStore;
+
 
 public class UserService {
-    private final Map<String, User> users = new HashMap<>();
+    private final DataStore ds;
 
-    public UserService() {
-        users.put("manager", new User("manager", "pass", User.Role.MANAGER));
-        users.put("server", new User("server", "pass", User.Role.SERVER));
-        users.put("chef", new User("chef", "pass", User.Role.CHEF));
+    public UserService(DataStore dataStore) {
+        this.ds = dataStore;
     }
 
     public User authenticate(String username, String password) {
-        User u = users.get(username);
-        if (u != null && u.getPassword().equals(password)) {
-            return u;
+        System.out.println("Searching for user: " + username);
+        for (User u : ds.getStaff()) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                System.out.println("User " + u.getUsername() + " found successfully.");
+                return u;
+            } else {
+                System.out.println("User not found: " + u.getUsername());
+            }
+        }
+        System.out.println("Authentication failed for user: " + username);
+        return null;
+    }
+
+    public List<User> listAll() { 
+        return ds.getStaff(); 
+    }
+
+    public void addEmployee(User u) { 
+        System.out.println("Adding employee: " + u.getUsername());
+        ds.getStaff().add(u); 
+        ds.saveStaff();
+    }
+
+    public User.Role getRole(String username) {
+        for (User u : ds.getStaff()) {
+            if (u.getUsername().equals(username)) {
+                return u.getRole();
+            }
         }
         return null;
+    }
+
+    public void removeEmployee(User u) { 
+        System.out.println("Removing employee: " + u.getUsername());
+        ds.getStaff().remove(u); 
+        ds.saveStaff();
     }
 }

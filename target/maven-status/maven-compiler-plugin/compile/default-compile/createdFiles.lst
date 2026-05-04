@@ -6,10 +6,8 @@ com\restaurant\grpc\generated\PlaceDineinOrderRequest$1.class
 com\restaurant\grpc\generated\CommandResponse$Builder.class
 com\restaurant\grpc\generated\GuestOrderOrBuilder.class
 com\restaurant\grpc\generated\AdjustPriceResponse$1.class
-com\restaurant\client\ServerClient.class
 com\restaurant\grpc\generated\ShowBillRequest$Builder.class
 com\restaurant\client\RestaurantGrpcClient.class
-com\restaurant\server\ClientHandler.class
 com\restaurant\grpc\generated\ListMenuResponseOrBuilder.class
 com\restaurant\grpc\generated\PlaceTakeoutOrderRequest$Builder.class
 com\restaurant\grpc\generated\OrderLineMessage$1.class
@@ -20,6 +18,7 @@ com\restaurant\model\MenuItem.class
 com\restaurant\model\Menu.class
 com\restaurant\grpc\generated\ServerServiceGrpc$ServerServiceStub.class
 com\restaurant\server\ChefGrpcImpl.class
+com\restaurant\server\CommandGrpcImpl$1.class
 com\restaurant\grpc\generated\OrderLineMessageOrBuilder.class
 com\restaurant\grpc\generated\ServerServiceGrpc$ServerServiceFileDescriptorSupplier.class
 com\restaurant\service\ClientHandler.class
@@ -40,15 +39,12 @@ com\restaurant\grpc\generated\ListOrdersResponse.class
 com\restaurant\grpc\generated\ListMenuRequestOrBuilder.class
 com\restaurant\grpc\generated\AdjustPriceRequestOrBuilder.class
 com\restaurant\grpc\generated\CommandServiceGrpc$CommandServiceFileDescriptorSupplier.class
-com\restaurant\client\ChefClient.class
 com\restaurant\grpc\generated\ListOrdersRequest.class
 com\restaurant\grpc\generated\OrderStatus.class
 com\restaurant\grpc\generated\GuestOrder$1.class
 com\restaurant\grpc\generated\LoginResponse$Builder.class
 com\restaurant\model\Order$Type.class
-com\restaurant\server\RestaurantServer.class
 com\restaurant\service\UserService.class
-com\restaurant\client\ManagerClient.class
 com\restaurant\model\User$Role.class
 com\restaurant\model\OrderType.class
 com\restaurant\grpc\generated\PlaceTakeoutOrderResponse$Builder.class
@@ -138,6 +134,7 @@ com\restaurant\grpc\generated\GenericResponse.class
 com\restaurant\grpc\generated\AdjustPriceResponseOrBuilder.class
 com\restaurant\grpc\generated\ManagerServiceGrpc$ManagerServiceBaseDescriptorSupplier.class
 com\restaurant\grpc\generated\ServerServiceGrpc$ServerServiceImplBase.class
+com\restaurant\service\DataStore$3.class
 com\restaurant\grpc\generated\ShowBillResponseOrBuilder.class
 com\restaurant\server\ManagerSession.class
 com\restaurant\grpc\generated\AdjustPriceRequest$Builder.class
@@ -168,4 +165,3 @@ com\restaurant\grpc\generated\GenericResponse$1.class
 com\restaurant\grpc\generated\PlaceTakeoutOrderRequestOrBuilder.class
 com\restaurant\grpc\generated\ShowBillRequest$1.class
 com\restaurant\grpc\generated\PlaceDineinOrderResponseOrBuilder.class
-com\restaurant\client\CommandClient.class

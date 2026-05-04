@@ -34,3 +34,8 @@ service ChefService {
     rpc MarkOrderReady(ShowBillRequest) returns (GenericResponse);  // ShowBillRequest reused for order_id
     rpc Logout(GenericResponse) returns (GenericResponse);
 }
+
+// Unified Command Service (ClientHandler-style)
+service CommandService {
+    rpc SendCommand(CommandRequest) returns (CommandResponse);
+}

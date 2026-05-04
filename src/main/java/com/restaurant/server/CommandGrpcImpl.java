@@ -1,11 +1,13 @@
 package com.restaurant.server;
 
 import com.restaurant.grpc.generated.CommandServiceGrpc;
+import com.restaurant.model.User;
 import com.restaurant.grpc.generated.CommandRequest;
 import com.restaurant.grpc.generated.CommandResponse;
 import com.restaurant.service.DataStore;
 import com.restaurant.service.MenuService;
 import com.restaurant.service.OrderService;
+import com.restaurant.service.UserService;
 import io.grpc.stub.StreamObserver;
 
 public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
@@ -13,6 +15,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
     private final DataStore dataStore;
     private final MenuService menuService;
     private final OrderService orderService;
+    private final UserService userService;
 
     // Session management per client (simplified - in production you'd use proper session management)
     private final ThreadLocal<ServerSession> serverSession = new ThreadLocal<>();
@@ -20,10 +23,11 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
     private final ThreadLocal<ChefSession> chefSession = new ThreadLocal<>();
     private final ThreadLocal<Object> currentSession = new ThreadLocal<>();
 
-    public CommandGrpcImpl(MenuService menuService, DataStore dataStore, OrderService orderService) {
+    public CommandGrpcImpl(MenuService menuService, DataStore dataStore, OrderService orderService, UserService userService) {
         this.menuService = menuService;
         this.dataStore = dataStore;
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     @Override
@@ -56,9 +60,9 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
 
             // Initialize sessions if not already done
             if (serverSession.get() == null) {
-                serverSession.set(new ServerSession(menuService, orderService, dataStore));
-                managerSession.set(new ManagerSession(menuService, dataStore, orderService));
-                chefSession.set(new ChefSession(orderService, menuService, dataStore));
+                serverSession.set(new ServerSession(menuService, orderService, dataStore, userService));
+                managerSession.set(new ManagerSession(menuService, dataStore, orderService, userService));
+                chefSession.set(new ChefSession(orderService, menuService, dataStore, userService));
             }
 
             Object session = currentSession.get();
@@ -66,17 +70,19 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
             if (session == null) {
                 // Not logged in yet
                 if (!line.toUpperCase().startsWith("LOGIN")) {
-                    return "Please LOGIN first using: LOGIN <user> <pass>";
+                    return "Please LOGIN first using: LOGIN <user> <pass>. Options: manager, server, chef.";
                 } else {
                     // Handle login
-                    if (parts.length < 3) {
-                        return "ERR usage: LOGIN <user> <pass>";
+                    if (parts.length != 3) {
+                        return "ERROR usage: LOGIN <user> <pass>";
                     } else {
                         String user = parts[1].toLowerCase();
                         String pass = parts[2];
 
-                        switch (user) {
-                            case "server":
+                        User us = userService.authenticate(user, pass);
+
+                        switch (us.getRole()) {
+                            case SERVER:
                                 String serverResponse = serverSession.get().processCommand(line);
                                 if (serverSession.get().isAuthenticated()) {
                                     currentSession.set(serverSession.get());
@@ -84,7 +90,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
                                 }
                                 return serverResponse;
 
-                            case "manager":
+                            case MANAGER:
                                 String managerResponse = managerSession.get().processCommand(line);
                                 if (managerSession.get().isAuthenticated()) {
                                     currentSession.set(managerSession.get());
@@ -92,7 +98,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
                                 }
                                 return managerResponse;
 
-                            case "chef":
+                            case CHEF:
                                 String chefResponse = chefSession.get().processCommand(line);
                                 if (chefSession.get().isAuthenticated()) {
                                     currentSession.set(chefSession.get());
@@ -101,7 +107,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
                                 return chefResponse;
 
                             default:
-                                return "ERR unknown user role";
+                                return "ERROR: unknown user role";
                         }
                     }
                 }
@@ -120,7 +126,8 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
                 // Handle logout
                 if ("LOGOUT".equalsIgnoreCase(response)) {
                     currentSession.set(null);
-                    return "Logged out successfully";
+                    System.out.println("Client logged out successfully.");
+                    return "Logged out successfully. Please LOGIN again to continue.";
                 }
 
                 return response;

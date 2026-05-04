@@ -50,7 +50,7 @@ public class Order {
     public double getTotal() {
         double total = 0.0;
         for (OrderLine l : lines) {
-            total += l.getItem().getPrice();
+            total += l.getItem().getPriceValue();
         }
         return total;
     }

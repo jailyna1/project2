@@ -1,13 +1,23 @@
 package com.restaurant.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class User {
     public enum Role { MANAGER, SERVER, CHEF }
 
-    private final String username;
-    private final String password;
-    private final Role role;
+    @SerializedName("user")
+    private String username;
+    
+    @SerializedName("pass")
+    private String password;
+    
+    @SerializedName("role")
+    private Role role;
+
+    // No-arg constructor for Gson deserialization
+    public User() {
+    }
 
     public User(String username, String password, Role role) {
         this.username = username;
@@ -30,5 +40,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(username);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + getUsername() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", role=" + getRole() +
+                '}';
     }
 }

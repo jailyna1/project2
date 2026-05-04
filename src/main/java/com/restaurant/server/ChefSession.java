@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.restaurant.model.MenuItem;
 import com.restaurant.model.Order;
 import com.restaurant.service.MenuService;
+import com.restaurant.service.UserService;
 import com.restaurant.service.DataStore;
 import com.restaurant.service.OrderService;
 import java.io.PrintStream;
@@ -15,14 +16,16 @@ public class ChefSession {
     private DataStore ds;
     private OrderService orderService;
     private final MenuService menuService;
+    private final UserService userService;
     private final Gson gson = new Gson();
 
     private boolean authenticated = false;
 
-    public ChefSession(OrderService os, MenuService menuService, DataStore dataStore) throws IOException {
+    public ChefSession(OrderService os, MenuService menuService, DataStore dataStore, UserService us) throws IOException {
         this.orderService = os;
         this.menuService = menuService;
         this.ds = dataStore;
+        this.userService = us;
     }
 
     public String processCommand(String line) {

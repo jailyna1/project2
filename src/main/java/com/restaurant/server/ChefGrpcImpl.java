@@ -6,6 +6,7 @@ import com.restaurant.model.Order;
 import com.restaurant.model.OrderLine;
 import com.restaurant.service.MenuService;
 import com.restaurant.service.OrderService;
+import com.restaurant.service.UserService;
 import com.restaurant.service.DataStore;
 
 import java.util.List;
@@ -13,13 +14,15 @@ import java.util.List;
 public class ChefGrpcImpl extends ChefServiceGrpc.ChefServiceImplBase {
     private final OrderService orderService;
     private final MenuService menuService;
+    private final UserService userService;
     private final DataStore dataStore;
     private boolean authenticated = false;
 
-    public ChefGrpcImpl(OrderService orderService, MenuService menuService, DataStore dataStore) {
+    public ChefGrpcImpl(OrderService orderService, MenuService menuService, DataStore dataStore, UserService userService) {
         this.orderService = orderService;
         this.menuService = menuService;
         this.dataStore = dataStore;
+        this.userService = userService;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class ChefGrpcImpl extends ChefServiceGrpc.ChefServiceImplBase {
                         .setItem(MenuItemMessage.newBuilder()
                                 .setName(line.getItem().getName())
                                 .setCategory(line.getItem().getCategory())
-                                .setPrice(line.getItem().getPrice())
+                                .setPrice(line.getItem().getPriceValue())
                                 .build())
                         .setQuantity(line.getQty())
                         .build();

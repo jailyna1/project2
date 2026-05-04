@@ -7,6 +7,7 @@ import com.restaurant.model.Order;
 import com.restaurant.model.OrderLine;
 import com.restaurant.service.MenuService;
 import com.restaurant.service.OrderService;
+import com.restaurant.service.UserService;
 import com.restaurant.service.DataStore;
 
 import java.util.ArrayList;
@@ -16,12 +17,14 @@ public class ServerGrpcImpl extends ServerServiceGrpc.ServerServiceImplBase {
     private final MenuService menuService;
     private final OrderService orderService;
     private final DataStore dataStore;
+    private final UserService userService;
     private boolean authenticated = false;
 
-    public ServerGrpcImpl(MenuService menuService, OrderService orderService, DataStore dataStore) {
+    public ServerGrpcImpl(MenuService menuService, OrderService orderService, DataStore dataStore, UserService userService) {
         this.menuService = menuService;
         this.orderService = orderService;
         this.dataStore = dataStore;
+        this.userService = userService;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class ServerGrpcImpl extends ServerServiceGrpc.ServerServiceImplBase {
             MenuItemMessage msg = MenuItemMessage.newBuilder()
                     .setName(item.getName())
                     .setCategory(item.getCategory())
-                    .setPrice(item.getPrice())
+                    .setPrice(item.getPriceValue())
                     .build();
             builder.addItems(msg);
         }
@@ -85,7 +88,7 @@ public class ServerGrpcImpl extends ServerServiceGrpc.ServerServiceImplBase {
                         .setItem(MenuItemMessage.newBuilder()
                                 .setName(line.getItem().getName())
                                 .setCategory(line.getItem().getCategory())
-                                .setPrice(line.getItem().getPrice())
+                                .setPrice(line.getItem().getPriceValue())
                                 .build())
                         .setQuantity(line.getQty())
                         .build();

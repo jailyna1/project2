@@ -30,10 +30,10 @@ public class Menu {
         return out;
     }
 
-    public boolean adjustPrice(String name, double newPrice) {
+    public boolean adjustPrice(String name, String newPrice) {
         MenuItem it = items.get(name);
         if (it == null) return false;
-        it.setPrice(newPrice);
+        it.setPrice(Double.parseDouble(newPrice));
         return true;
     }
 }

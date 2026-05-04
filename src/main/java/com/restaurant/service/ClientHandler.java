@@ -13,13 +13,15 @@ public class ClientHandler implements Runnable {
     private final DataStore dataStore;
     private final MenuService menuService;
     private final OrderService orderService;
+    private final UserService userService;
 
     public ClientHandler(Socket socket, DataStore ds,
-                         MenuService menuService, OrderService orderService) {
+                         MenuService menuService, OrderService orderService, UserService userService) {
         this.socket = socket;
         this.dataStore = ds;
         this.menuService = menuService;
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     @Override
@@ -30,9 +32,9 @@ public class ClientHandler implements Runnable {
         ) {
             System.out.println("Client connected: " + socket.getRemoteSocketAddress());
 
-            ServerSession serverSession = new ServerSession(menuService, orderService, dataStore);
-            ManagerSession managerSession = new ManagerSession(menuService, dataStore, orderService);
-            ChefSession chefSession = new ChefSession(orderService, menuService, dataStore);
+            ServerSession serverSession = new ServerSession(menuService, orderService, dataStore, userService);
+            ManagerSession managerSession = new ManagerSession(menuService, dataStore, orderService, userService);
+            ChefSession chefSession = new ChefSession(orderService, menuService, dataStore, userService);
 
             Object currentSession = null;
 

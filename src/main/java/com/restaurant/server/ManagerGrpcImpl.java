@@ -5,6 +5,7 @@ import com.restaurant.grpc.generated.*;
 import com.restaurant.model.MenuItem;
 import com.restaurant.service.MenuService;
 import com.restaurant.service.OrderService;
+import com.restaurant.service.UserService;
 import com.restaurant.service.DataStore;
 
 import java.util.List;
@@ -13,12 +14,14 @@ public class ManagerGrpcImpl extends ManagerServiceGrpc.ManagerServiceImplBase {
     private final MenuService menuService;
     private final DataStore dataStore;
     private final OrderService orderService;
+    private final UserService userService;
     private boolean authenticated = false;
 
-    public ManagerGrpcImpl(MenuService menuService, DataStore dataStore, OrderService os) {
+    public ManagerGrpcImpl(MenuService menuService, DataStore dataStore, OrderService os, UserService us) {
         this.menuService = menuService;
         this.dataStore = dataStore;
         this.orderService = os;
+        this.userService = us;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class ManagerGrpcImpl extends ManagerServiceGrpc.ManagerServiceImplBase {
             MenuItemMessage msg = MenuItemMessage.newBuilder()
                     .setName(item.getName())
                     .setCategory(item.getCategory())
-                    .setPrice(item.getPrice())
+                    .setPrice(item.getPriceValue())
                     .build();
             builder.addItems(msg);
         }
@@ -91,7 +94,7 @@ public class ManagerGrpcImpl extends ManagerServiceGrpc.ManagerServiceImplBase {
             return;
         }
 
-        boolean success = menuService.adjustPrice(request.getItemName(), request.getNewPrice());
+        boolean success = menuService.adjustPrice(request.getItemName(), String.valueOf(request.getNewPrice()));
         AdjustPriceResponse response = AdjustPriceResponse.newBuilder()
                 .setSuccess(success)
                 .setMessage(success ? "Price updated" : "Error item not found")

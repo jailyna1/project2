@@ -119,6 +119,16 @@ message ShowBillResponse {
     string bill = 2;
 }
 
+// Command Request (for unified command interface)
+message CommandRequest {
+    string command = 1;
+}
+
+// Command Response (for unified command interface)
+message CommandResponse {
+    string response = 1;
+}
+
 // Generic Response
 message GenericResponse {
     bool success = 1;

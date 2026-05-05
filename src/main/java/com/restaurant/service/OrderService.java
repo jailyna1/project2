@@ -1,8 +1,10 @@
 package com.restaurant.service;
 
-import com.restaurant.model.*;
-
 import java.util.List;
+
+import com.restaurant.model.MenuItem;
+import com.restaurant.model.Order;
+import com.restaurant.model.OrderLine;
 
 public class OrderService {
     private final DataStore ds;
@@ -52,13 +54,19 @@ public class OrderService {
 
     public String showBill(int orderId) {
         Order o = findOrder(orderId);
+        Double countTotal = 0.00;
+
         if (o == null) return "Order not found";
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Bill for Order #%d:", o.getId()));
+        System.out.println("Found order #" + o.getId());
+        sb.append(String.format("Bill for Order #%d:\n", o.getId()));
     
         for (OrderLine l : o.getLines()) {
-            sb.append(String.format(" %s - $%.2f;", l.getItem().getName(), l.getItem().getPrice()));
+            sb.append(String.format(" %s - $%s;", l.getItem().getName(), l.getItem().getPrice()));
+            countTotal += l.getItem().getPriceValue();
+            System.out.println("Adding item to bill: " + l.getItem().getName() + " - $" + l.getItem().getPrice() + " --> $" + countTotal);
         }
+        sb.append(String.format(" \nTotal: $%.2f", countTotal));
         return sb.toString();
     }
 

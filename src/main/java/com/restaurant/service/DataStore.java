@@ -7,6 +7,7 @@ import com.restaurant.model.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataStore {
@@ -45,15 +46,15 @@ public class DataStore {
     }
 
     private void seedMenu() {
-        menu.addItem(new MenuItem("Bruschetta", "Starters", 6.50));
-        menu.addItem(new MenuItem("Caesar Salad", "Starters", 7.25));
-        menu.addItem(new MenuItem("Grilled Salmon", "Mains", 18.99));
-        menu.addItem(new MenuItem("Steak", "Mains", 21.50));
-        menu.addItem(new MenuItem("Pasta Alfredo", "Mains", 14.75));
-        menu.addItem(new MenuItem("Cheesecake", "Desserts", 6.00));
-        menu.addItem(new MenuItem("Chocolate Mousse", "Desserts", 6.50));
-        menu.addItem(new MenuItem("Coffee", "Drinks", 2.75));
-        menu.addItem(new MenuItem("Lemonade", "Drinks", 3.25));
+        menu.addItem(new MenuItem("Bruschetta", "Starters", 6.50, Arrays.asList("bread", "tomato", "basil")));
+        menu.addItem(new MenuItem("Caesar Salad", "Starters", 7.25, Arrays.asList("lettuce", "croutons", "parmesan", "caesar dressing")));
+        menu.addItem(new MenuItem("Grilled Salmon", "Mains", 18.99, Arrays.asList("salmon", "lemon", "dill")));
+        menu.addItem(new MenuItem("Steak", "Mains", 21.50, Arrays.asList("beef", "salt", "pepper")));
+        menu.addItem(new MenuItem("Pasta Alfredo", "Mains", 14.75, Arrays.asList("pasta", "alfredo sauce")));
+        menu.addItem(new MenuItem("Cheesecake", "Desserts", 6.00, Arrays.asList("cream cheese", "sugar", "eggs")));
+        menu.addItem(new MenuItem("Chocolate Mousse", "Desserts", 6.50, Arrays.asList("chocolate", "cream", "eggs")));
+        menu.addItem(new MenuItem("Coffee", "Drinks", 2.75, Arrays.asList("coffee beans", "water")));
+        menu.addItem(new MenuItem("Lemonade", "Drinks", 3.25, Arrays.asList("lemons", "sugar", "water")));
 
     }
 
@@ -85,14 +86,19 @@ public class DataStore {
         }
     }
 
-    public void updateMenuItemPrice(String itemName, String newPrice) {
+    public boolean updateMenuItemPrice(String itemName, String newPrice) {
         for (MenuItem m : menu.listAll()) {
             if (m.getName().equals(itemName)) {
-                m.setPrice(Double.parseDouble(newPrice));
+                try {
+                    m.setPrice(Double.parseDouble(newPrice));
+                } catch (NumberFormatException e) {
+                    return false;
+                }
                 saveMenu();
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     private void loadStaff() {

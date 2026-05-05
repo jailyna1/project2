@@ -63,12 +63,11 @@ C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\service\DataStore.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\Order.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\PlaceTakeoutOrderResponseOrBuilder.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\RestaurantServer.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\OrderLineMessage.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\service\MenuService.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\AdjustPriceResponseOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListOrdersRequest.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\service\ClientHandler.java
+C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\RestaurantSession.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\client\RestaurantGrpcClient.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\GuestOrder.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\ClientHandler.java

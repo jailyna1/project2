@@ -19,8 +19,6 @@ public class UserService {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
                 System.out.println("User " + u.getUsername() + " found successfully.");
                 return u;
-            } else {
-                System.out.println("User not found: " + u.getUsername());
             }
         }
         System.out.println("Authentication failed for user: " + username);

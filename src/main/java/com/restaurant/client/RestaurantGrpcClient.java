@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class RestaurantGrpcClient {
     private final ManagedChannel channel;
     private final CommandServiceGrpc.CommandServiceBlockingStub stub;
+    private String sessionId;
 
     public RestaurantGrpcClient(String host, int port) {
         this.channel = ManagedChannelBuilder.forAddress(host, port)
@@ -29,20 +30,28 @@ public class RestaurantGrpcClient {
             System.out.print("> ");
             line = scanner.nextLine().trim();
 
-            if (line.equalsIgnoreCase("EXIT") || line.equalsIgnoreCase("QUIT")) {
-                System.exit(0);
-                break;
-            }
-
             if (!line.isEmpty()) {
                 try {
-                    CommandRequest request = CommandRequest.newBuilder()
-                            .setCommand(line)
-                            .build();
+                    CommandRequest.Builder requestBuilder = CommandRequest.newBuilder().setCommand(line);
+                    if (sessionId != null && !sessionId.isEmpty()) {
+                        requestBuilder.setSessionId(sessionId);
+                    }
 
-                    CommandResponse response = stub.sendCommand(request);
+                    CommandResponse response = stub.sendCommand(requestBuilder.build());
                     System.out.println(response.getResponse());
 
+                    if (response.getSessionId() != null && !response.getSessionId().isEmpty()) {
+                        sessionId = response.getSessionId();
+                    }
+
+                    if ("LOGOUT".equalsIgnoreCase(line) || "EXIT".equalsIgnoreCase(line)) {
+                        sessionId = null;
+                    }
+
+                    if ("EXIT".equalsIgnoreCase(line)) {
+                        shutdown();
+                        break;
+                    }
                 } catch (Exception e) {
                     System.err.println("Error: " + e.getMessage());
                 }

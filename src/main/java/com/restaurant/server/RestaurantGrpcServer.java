@@ -7,6 +7,7 @@ import com.restaurant.service.OrderService;
 import com.restaurant.service.UserService;
 import com.restaurant.service.DataStore;
 
+
 import java.io.IOException;
 
 public class RestaurantGrpcServer {
@@ -16,6 +17,7 @@ public class RestaurantGrpcServer {
     private final OrderService orderService;
     private final UserService userService;
     private Server server;
+    private static RestaurantGrpcServer instance;
 
     public RestaurantGrpcServer(int port) {
         this.port = port;
@@ -23,14 +25,12 @@ public class RestaurantGrpcServer {
         this.menuService = new MenuService(dataStore.getMenu(), dataStore);
         this.orderService = new OrderService(dataStore);
         this.userService = new UserService(dataStore);
+        instance = this;
     }
 
     public void start() throws IOException {
         server = ServerBuilder.forPort(port)
-                .addService((io.grpc.BindableService) new CommandGrpcImpl(menuService, dataStore, orderService, userService))
-                .addService((io.grpc.BindableService) new ManagerGrpcImpl(menuService, dataStore, orderService, userService))
-                .addService((io.grpc.BindableService) new ServerGrpcImpl(menuService, orderService, dataStore, userService))
-                .addService((io.grpc.BindableService) new ChefGrpcImpl(orderService, menuService, dataStore, userService))
+                .addService((io.grpc.BindableService) new CommandGrpcImpl(this, dataStore, menuService, orderService, userService))
                 .build()
                 .start();
 
@@ -54,9 +54,13 @@ public class RestaurantGrpcServer {
 
     public void stop() throws InterruptedException {
         if (server != null) {
-            server.shutdown().awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS);
+            server.shutdown().awaitTermination(20, java.util.concurrent.TimeUnit.SECONDS);
             System.out.println("Server stopped.");
         }
+    }
+
+    public static RestaurantGrpcServer getInstance() {
+        return instance;
     }
 
     public void blockUntilShutdown() throws InterruptedException {

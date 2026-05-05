@@ -19,8 +19,7 @@ public class MenuService {
     public boolean adjustPrice(String itemName, String newPrice) {
         for (MenuItem m : menu.listAll()) {
             if (m.getName().toLowerCase().equals(itemName.toLowerCase())) {
-                ds.updateMenuItemPrice(m.getName(), newPrice);
-                return true;
+                return ds.updateMenuItemPrice(m.getName(), newPrice);
             }
         }
         return menu.adjustPrice(itemName, newPrice);
@@ -29,5 +28,17 @@ public class MenuService {
     public MenuItem findByName(String itemName) {
         for (MenuItem m : menu.listAll()) if (m.getName().equals(itemName)) return m;
         return null;
+    }
+
+    public String getRecipe(String itemName) {
+        MenuItem item = findByName(itemName);
+        if (item == null) {
+            return null;
+        }
+        String recipeList = new String();
+        for (String ingredient : item.getRecipe()) {
+            recipeList = recipeList + "- " + ingredient + "\n";
+        }
+        return recipeList;
     }
 }

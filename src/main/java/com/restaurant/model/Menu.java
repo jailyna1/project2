@@ -33,7 +33,11 @@ public class Menu {
     public boolean adjustPrice(String name, String newPrice) {
         MenuItem it = items.get(name);
         if (it == null) return false;
-        it.setPrice(Double.parseDouble(newPrice));
+        try {
+            it.setPrice(Double.parseDouble(newPrice));
+        } catch (NumberFormatException e) {
+            return false;
+        }
         return true;
     }
 }

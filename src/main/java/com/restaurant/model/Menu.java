@@ -16,6 +16,15 @@ public class Menu {
         return items.get(name);
     }
 
+    public MenuItem getItemIgnoreCase(String name) {
+        for (MenuItem item : items.values()) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public List<MenuItem> listAll() {
         return new ArrayList<>(items.values());
     }
@@ -30,10 +39,14 @@ public class Menu {
         return out;
     }
 
-    public boolean adjustPrice(String name, double newPrice) {
+    public boolean adjustPrice(String name, String newPrice) {
         MenuItem it = items.get(name);
         if (it == null) return false;
-        it.setPrice(newPrice);
+        try {
+            it.setPrice(Double.parseDouble(newPrice));
+        } catch (NumberFormatException e) {
+            return false;
+        }
         return true;
     }
 }

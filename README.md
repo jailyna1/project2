@@ -1,6 +1,6 @@
 ## Getting Started
 
-TO RUN FOLLOW THESE INSTRUCTIONS:
+TO RUN FOLLOW THESE INSTRUCTIONS (from project2 folder):
 1. Terminal 1 - run:
     - apache-maven-3.9.14\bin\mvn.cmd clean compile
     - apache-maven-3.9.14\bin\mvn.cmd exec:java -D"exec.mainClass=com.restaurant.server.RestaurantGrpcServer"

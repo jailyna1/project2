@@ -159,9 +159,10 @@ public final class RestaurantMessages {
       "\022ListOrdersResponse\0221\n\006orders\030\001 \003(\0132!.co" +
       "m.restaurant.grpc.OrderMessage\"#\n\017ShowBi" +
       "llRequest\022\020\n\010order_id\030\001 \001(\005\"1\n\020ShowBillR" +
-      "esponse\022\017\n\007success\030\001 \001(\010\022\014\n\004bill\030\002 \001(\t\"!" +
-      "\n\016CommandRequest\022\017\n\007command\030\001 \001(\t\"#\n\017Com" +
-      "mandResponse\022\020\n\010response\030\001 \001(\t\"3\n\017Generi" +
+      "esponse\022\017\n\007success\030\001 \001(\010\022\014\n\004bill\030\002 \001(\t\"5" +
+      "\n\016CommandRequest\022\017\n\007command\030\001 \001(\t\022\022\n\nses" +
+      "sion_id\030\002 \001(\t\"7\n\017CommandResponse\022\020\n\010resp" +
+      "onse\030\001 \001(\t\022\022\n\nsession_id\030\002 \001(\t\"3\n\017Generi" +
       "cResponse\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 " +
       "\001(\t*4\n\013OrderStatus\022\013\n\007PENDING\020\000\022\t\n\005READY" +
       "\020\001\022\r\n\tCOMPLETED\020\002B5\n\035com.restaurant.grpc" +
@@ -284,13 +285,13 @@ public final class RestaurantMessages {
     internal_static_com_restaurant_grpc_CommandRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_restaurant_grpc_CommandRequest_descriptor,
-        new java.lang.String[] { "Command", });
+        new java.lang.String[] { "Command", "SessionId", });
     internal_static_com_restaurant_grpc_CommandResponse_descriptor =
       getDescriptor().getMessageTypes().get(19);
     internal_static_com_restaurant_grpc_CommandResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_restaurant_grpc_CommandResponse_descriptor,
-        new java.lang.String[] { "Response", });
+        new java.lang.String[] { "Response", "SessionId", });
     internal_static_com_restaurant_grpc_GenericResponse_descriptor =
       getDescriptor().getMessageTypes().get(20);
     internal_static_com_restaurant_grpc_GenericResponse_fieldAccessorTable = new

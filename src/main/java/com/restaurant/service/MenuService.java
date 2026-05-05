@@ -16,14 +16,29 @@ public class MenuService {
     public List<MenuItem> listAll() { return menu.listAll(); }
     public List<MenuItem> listByCategory(String category) { return menu.listByCategory(category); }
 
-    public boolean adjustPrice(String itemName, double newPrice) {
-        ds.updateMenuItemPrice(itemName, newPrice);
+    public boolean adjustPrice(String itemName, String newPrice) {
+        for (MenuItem m : menu.listAll()) {
+            if (m.getName().toLowerCase().equals(itemName.toLowerCase())) {
+                return ds.updateMenuItemPrice(m.getName(), newPrice);
+            }
+        }
         return menu.adjustPrice(itemName, newPrice);
-
     }
 
     public MenuItem findByName(String itemName) {
-        for (MenuItem m : menu.listAll()) if (m.getName().equals(itemName)) return m;
+        for (MenuItem m : menu.listAll()) if (m.getName().equalsIgnoreCase(itemName)) return m;
         return null;
+    }
+
+    public String getRecipe(String itemName) {
+        MenuItem item = findByName(itemName);
+        if (item == null) {
+            return null;
+        }
+        String recipeList = new String();
+        for (String ingredient : item.getRecipe()) {
+            recipeList = recipeList + "- " + ingredient + "\n";
+        }
+        return recipeList;
     }
 }

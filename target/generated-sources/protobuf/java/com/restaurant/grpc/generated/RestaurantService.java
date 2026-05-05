@@ -62,7 +62,7 @@ public final class RestaurantService {
       "c.GenericResponse\022T\n\006Logout\022$.com.restau" +
       "rant.grpc.GenericResponse\032$.com.restaura" +
       "nt.grpc.GenericResponse2j\n\016CommandServic" +
-      "e\022X\n\013SendCommand\022#.com.restaurant.grpc.C" +
+      "e\022X\n\013sendCommand\022#.com.restaurant.grpc.C" +
       "ommandRequest\032$.com.restaurant.grpc.Comm" +
       "andResponseB4\n\035com.restaurant.grpc.gener" +
       "atedB\021RestaurantServiceP\001b\006proto3"

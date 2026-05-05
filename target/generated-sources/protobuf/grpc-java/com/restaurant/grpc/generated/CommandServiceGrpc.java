@@ -22,7 +22,7 @@ public final class CommandServiceGrpc {
       com.restaurant.grpc.generated.CommandResponse> getSendCommandMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "SendCommand",
+      fullMethodName = SERVICE_NAME + '/' + "sendCommand",
       requestType = com.restaurant.grpc.generated.CommandRequest.class,
       responseType = com.restaurant.grpc.generated.CommandResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
@@ -35,13 +35,13 @@ public final class CommandServiceGrpc {
           CommandServiceGrpc.getSendCommandMethod = getSendCommandMethod =
               io.grpc.MethodDescriptor.<com.restaurant.grpc.generated.CommandRequest, com.restaurant.grpc.generated.CommandResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "SendCommand"))
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "sendCommand"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.restaurant.grpc.generated.CommandRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.restaurant.grpc.generated.CommandResponse.getDefaultInstance()))
-              .setSchemaDescriptor(new CommandServiceMethodDescriptorSupplier("SendCommand"))
+              .setSchemaDescriptor(new CommandServiceMethodDescriptorSupplier("sendCommand"))
               .build();
         }
       }

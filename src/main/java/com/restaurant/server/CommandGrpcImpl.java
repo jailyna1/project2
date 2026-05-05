@@ -1,42 +1,53 @@
 package com.restaurant.server;
 
 import com.restaurant.grpc.generated.CommandServiceGrpc;
+
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.restaurant.grpc.generated.CommandRequest;
 import com.restaurant.grpc.generated.CommandResponse;
 import com.restaurant.service.DataStore;
 import com.restaurant.service.MenuService;
 import com.restaurant.service.OrderService;
+import com.restaurant.service.UserService;
 import io.grpc.stub.StreamObserver;
 
 public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
 
+    private final RestaurantGrpcServer server;
     private final DataStore dataStore;
     private final MenuService menuService;
     private final OrderService orderService;
+    private final UserService userService;
 
-    // Session management per client (simplified - in production you'd use proper session management)
-    private final ThreadLocal<ServerSession> serverSession = new ThreadLocal<>();
-    private final ThreadLocal<ManagerSession> managerSession = new ThreadLocal<>();
-    private final ThreadLocal<ChefSession> chefSession = new ThreadLocal<>();
-    private final ThreadLocal<Object> currentSession = new ThreadLocal<>();
+    private final ConcurrentHashMap<String, RestaurantSession> sessions = new ConcurrentHashMap<>();
 
-    public CommandGrpcImpl(MenuService menuService, DataStore dataStore, OrderService orderService) {
+    public CommandGrpcImpl(RestaurantGrpcServer server, DataStore dataStore, MenuService menuService, OrderService orderService, UserService userService) {
+        this.server = server;
         this.menuService = menuService;
         this.dataStore = dataStore;
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     @Override
     public void sendCommand(CommandRequest request, StreamObserver<CommandResponse> responseObserver) {
         try {
-            String command = request.getCommand().trim();
-            String response = processCommand(command);
+            String command = request.getCommand();
+            String sessionId = request.getSessionId();
+            if (command != null) {
+                command = command.trim();
+            }
+            if (sessionId != null) {
+                sessionId = sessionId.trim();
+            }
 
-            CommandResponse commandResponse = CommandResponse.newBuilder()
-                    .setResponse(response)
-                    .build();
+            CommandResponse.Builder responseBuilder = CommandResponse.newBuilder();
+            String response = processCommand(command, sessionId, responseBuilder);
 
-            responseObserver.onNext(commandResponse);
+            responseBuilder.setResponse(response);
+            responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
 
         } catch (Exception e) {
@@ -44,7 +55,7 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
         }
     }
 
-    private String processCommand(String line) {
+    private String processCommand(String line, String sessionId, CommandResponse.Builder responseBuilder) {
         try {
             if (line == null || line.trim().isEmpty()) {
                 return "";
@@ -54,77 +65,39 @@ public class CommandGrpcImpl extends CommandServiceGrpc.CommandServiceImplBase {
             String[] parts = line.split("\\s+");
             String cmd = parts[0].toUpperCase();
 
-            // Initialize sessions if not already done
-            if (serverSession.get() == null) {
-                serverSession.set(new ServerSession(menuService, orderService, dataStore));
-                managerSession.set(new ManagerSession(menuService, dataStore, orderService));
-                chefSession.set(new ChefSession(orderService, menuService, dataStore));
-            }
+            RestaurantSession session = null;
 
-            Object session = currentSession.get();
+            if (sessionId != null && !sessionId.isEmpty()) {
+                session = sessions.get(sessionId);
+            }
 
             if (session == null) {
-                // Not logged in yet
-                if (!line.toUpperCase().startsWith("LOGIN")) {
+                if (!cmd.equals("LOGIN")) {
                     return "Please LOGIN first using: LOGIN <user> <pass>";
-                } else {
-                    // Handle login
-                    if (parts.length < 3) {
-                        return "ERR usage: LOGIN <user> <pass>";
-                    } else {
-                        String user = parts[1].toLowerCase();
-                        String pass = parts[2];
-
-                        switch (user) {
-                            case "server":
-                                String serverResponse = serverSession.get().processCommand(line);
-                                if (serverSession.get().isAuthenticated()) {
-                                    currentSession.set(serverSession.get());
-                                    return serverResponse;
-                                }
-                                return serverResponse;
-
-                            case "manager":
-                                String managerResponse = managerSession.get().processCommand(line);
-                                if (managerSession.get().isAuthenticated()) {
-                                    currentSession.set(managerSession.get());
-                                    return managerResponse;
-                                }
-                                return managerResponse;
-
-                            case "chef":
-                                String chefResponse = chefSession.get().processCommand(line);
-                                if (chefSession.get().isAuthenticated()) {
-                                    currentSession.set(chefSession.get());
-                                    return "Welcome Chef! " + chefResponse;
-                                }
-                                return chefResponse;
-
-                            default:
-                                return "ERR unknown user role";
-                        }
-                    }
                 }
-
-            } else {
-                // Already logged in - process command with current session
-                String response;
-                if (session == serverSession.get()) {
-                    response = serverSession.get().processCommand(line);
-                } else if (session == managerSession.get()) {
-                    response = managerSession.get().processCommand(line);
-                } else {
-                    response = chefSession.get().processCommand(line);
-                }
-
-                // Handle logout
-                if ("LOGOUT".equalsIgnoreCase(response)) {
-                    currentSession.set(null);
-                    return "Logged out successfully";
-                }
-
-                return response;
+                session = new RestaurantSession(server, dataStore, menuService, orderService, userService);
             }
+
+            String response = session.processCommand(line);
+
+            if (cmd.equals("LOGIN") && session.isAuthenticated()) {
+                if (sessionId == null || sessionId.isEmpty() || !sessions.containsKey(sessionId)) {
+                    sessionId = UUID.randomUUID().toString();
+                }
+                sessions.put(sessionId, session);
+            }
+
+            if (cmd.equals("LOGOUT") || cmd.equals("EXIT")) {
+                if (sessionId != null && !sessionId.isEmpty()) {
+                    sessions.remove(sessionId);
+                }
+            }
+
+            if (sessionId != null && !sessionId.isEmpty()) {
+                responseBuilder.setSessionId(sessionId);
+            }
+
+            return response;
         } catch (Exception e) {
             return "ERR: " + e.getMessage();
         }

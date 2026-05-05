@@ -37,5 +37,6 @@ service ChefService {
 
 // Unified Command Service (ClientHandler-style)
 service CommandService {
-    rpc SendCommand(CommandRequest) returns (CommandResponse);
+    rpc sendCommand(CommandRequest) returns (CommandResponse);
 }
+

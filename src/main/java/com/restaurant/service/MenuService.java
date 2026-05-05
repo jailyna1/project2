@@ -26,7 +26,7 @@ public class MenuService {
     }
 
     public MenuItem findByName(String itemName) {
-        for (MenuItem m : menu.listAll()) if (m.getName().equals(itemName)) return m;
+        for (MenuItem m : menu.listAll()) if (m.getName().equalsIgnoreCase(itemName)) return m;
         return null;
     }
 

@@ -14,10 +14,8 @@ public class UserService {
     }
 
     public User authenticate(String username, String password) {
-        System.out.println("Searching for user: " + username);
         for (User u : ds.getStaff()) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-                System.out.println("User " + u.getUsername() + " found successfully.");
                 return u;
             }
         }
@@ -30,7 +28,6 @@ public class UserService {
     }
 
     public void addEmployee(User u) { 
-        System.out.println("Adding employee: " + u.getUsername());
         ds.getStaff().add(u); 
         ds.saveStaff();
     }
@@ -45,7 +42,6 @@ public class UserService {
     }
 
     public void removeEmployee(User u) { 
-        System.out.println("Removing employee: " + u.getUsername());
         ds.getStaff().remove(u); 
         ds.saveStaff();
     }

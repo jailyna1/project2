@@ -11,9 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DataStore {
-    private final Menu menu = new Menu();
+    //private final Menu menu = new Menu();
     private final List<Order> orders = new ArrayList<>();
     private final List<User> staff = new ArrayList<>();
+    private final List<Table> tables = new ArrayList<>();
+    private final Menu menu = new Menu();
+    private final List<Ingredient> ingredients = new ArrayList<>();
+
     private final Gson gson = new Gson();
     private final String dataDir = "data";
 
@@ -22,6 +26,8 @@ public class DataStore {
         loadMenu();
         loadOrders();
         loadStaff();
+        loadTables();
+        loadIngredients();
     }
 
     private void ensureDir() {
@@ -32,7 +38,6 @@ public class DataStore {
     private void loadMenu() {
         File f = new File(dataDir, "menu.json");
         if (!f.exists()) {
-            seedMenu();
             saveMenu();
             return;
         }
@@ -43,19 +48,6 @@ public class DataStore {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load menu", e);
         }
-    }
-
-    private void seedMenu() {
-        menu.addItem(new MenuItem("Bruschetta", "Starters", 6.50, Arrays.asList("bread", "tomato", "basil")));
-        menu.addItem(new MenuItem("Caesar Salad", "Starters", 7.25, Arrays.asList("lettuce", "croutons", "parmesan", "caesar dressing")));
-        menu.addItem(new MenuItem("Grilled Salmon", "Mains", 18.99, Arrays.asList("salmon", "lemon", "dill")));
-        menu.addItem(new MenuItem("Steak", "Mains", 21.50, Arrays.asList("beef", "salt", "pepper")));
-        menu.addItem(new MenuItem("Pasta Alfredo", "Mains", 14.75, Arrays.asList("pasta", "alfredo sauce")));
-        menu.addItem(new MenuItem("Cheesecake", "Desserts", 6.00, Arrays.asList("cream cheese", "sugar", "eggs")));
-        menu.addItem(new MenuItem("Chocolate Mousse", "Desserts", 6.50, Arrays.asList("chocolate", "cream", "eggs")));
-        menu.addItem(new MenuItem("Coffee", "Drinks", 2.75, Arrays.asList("coffee beans", "water")));
-        menu.addItem(new MenuItem("Lemonade", "Drinks", 3.25, Arrays.asList("lemons", "sugar", "water")));
-
     }
 
     private void saveMenu() {
@@ -104,7 +96,6 @@ public class DataStore {
     private void loadStaff() {
         File f = new File(dataDir, "staff.json");
         if (!f.exists()) {
-            seedStaff();
             saveStaff();
             return ;
         }
@@ -117,18 +108,90 @@ public class DataStore {
         }
     }
 
-    private void seedStaff() {
-        staff.add(new User("managerCurr", "password", User.Role.MANAGER));
-        staff.add(new User("serverCurr", "password", User.Role.SERVER));
-        staff.add(new User("chefCurr", "password", User.Role.CHEF));
-    }
-
     public void saveStaff() {
         try (Writer s = new FileWriter(new File(dataDir, "staff.json"))) {
             s.write(gson.toJson(staff));
         } catch (IOException e) {
             throw new RuntimeException("Failed to save staff", e);
         }
+    }
+    private void loadTables() {
+        File f = new File(dataDir, "tables.json");
+        if (!f.exists()) {
+            seedTables();
+            saveTables();
+            return ;
+        }
+        try (Reader r = new FileReader(f)) {
+            Type type = new TypeToken<TablesWrapper>(){}.getType();
+            TablesWrapper wrapper = gson.fromJson(r, type);
+            if (wrapper != null && wrapper.getTables() != null) {
+                tables.addAll(wrapper.getTables());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load tables", e);
+        }
+    }
+
+    private void seedTables() {
+        tables.add(new Table(1, 4, true));
+        tables.add(new Table(2, 2, true));
+        tables.add(new Table(3, 4, true));
+        tables.add(new Table(4, 2, true));
+        tables.add(new Table(5, 3, true));
+        tables.add(new Table(6, 4, true));
+        tables.add(new Table(7, 2, true));
+        tables.add(new Table(8, 4, true));
+        tables.add(new Table(9, 3, true));
+        tables.add(new Table(10, 2, true));
+    }
+
+    public void saveTables() {
+        try (Writer t = new FileWriter(new File(dataDir, "tables.json"))) {
+            TablesWrapper wrapper = new TablesWrapper(tables);
+            t.write(gson.toJson(wrapper));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save tables", e);
+        }
+    }
+
+    private void loadIngredients() {
+        File f = new File(dataDir, "ingredients.json");
+        if (!f.exists()) {
+            saveIngredients();
+            return ;
+        }
+        try (Reader r = new FileReader(f)) {
+            Type type = new TypeToken<List<Ingredient>>(){}.getType();
+            List<Ingredient> list = gson.fromJson(r, type);
+            if (list != null) ingredients.addAll(list);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load ingredients", e);
+        }
+    }
+
+    private void saveIngredients() {
+        try (Writer w = new FileWriter(new File(dataDir, "ingredients.json"))) {
+            w.write(gson.toJson(ingredients));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save ingredients", e);
+        }
+    }
+
+    public boolean updateIngredientQuantity(String ingredientName, int newQuantity) {
+        for (Ingredient i : ingredients) {
+            if (i.getName().equals(ingredientName)) {
+                i.setQuantity(newQuantity);
+                saveIngredients();
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public List<Table> getTables() {
+        return tables;
     }
 
     public Menu getMenu() { 
@@ -142,8 +205,33 @@ public class DataStore {
         return staff;
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     public static DataStore getInstance() {
         DataStore instance = new DataStore();
         return instance;
     }
+
+    private static class TablesWrapper {
+        private List<Table> tables;
+
+        public TablesWrapper(List<Table> tables) {
+            this.tables = tables;
+        }
+
+        public List<Table> getTables() {
+            return tables;
+        }
+    }
+
+	public int getIngredientQuantity(String itemName) {
+		for (Ingredient i : ingredients) {
+			if (i.getName().equals(itemName)) {
+				return i.getQuantity();
+			}
+		}
+		return 0;
+	}
 }

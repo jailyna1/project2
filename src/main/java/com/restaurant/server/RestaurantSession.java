@@ -164,10 +164,94 @@ public class RestaurantSession {
                         }
                     
 
-                //place takout
+                //place takeout
+                case "PLACE_TAKEOUT_ORDER":
+                    //only allow SERVER roles to place takeout orders
+                    if (userService.getRole(currentUser) == User.Role.SERVER) {
+                        authenticated = true;
+
+                        if (parts.length < 3) {
+                            System.out.println("PLACE_TAKEOUT_ORDER command received with incorrect number of arguments");
+                            return "Error usage: PLACE_TAKEOUT_ORDER <customerName> <item1> <item2> ... (up to 10 items)";
+                        }
+
+                        String customerName = parts[1];
+                        Order o = orderService.createTakeOutOrder(customerName);
+                        
+                        for(int i = 2; i < parts.length && i < 12; i++) {  // up to 10 items
+                            System.out.println("Adding item to order: " + parts[i]);
+                            if (!orderService.addOrderLine(o.getId(), parts[i])) {
+                                return "Error: invalid item '" + parts[i] + "'";
+                            }
+                        }
+                        System.out.println();
+                        return "Takeout order placed: " + o.toString();
+                    } else {
+                        authenticated = false;
+                        System.out.println("Error: not authorized to place takeout orders with " + userService.getRole(currentUser));
+                        return "ERROR: not authorized. Log into valid user account.";
+                    }
 
                 //place dinein
-                
+                case "PLACE_DINE_IN_ORDER":
+                    //only allow SERVER roles to place dine-in orders
+                    if (userService.getRole(currentUser) == User.Role.SERVER) {
+                        authenticated = true;
+
+                        if (parts.length < 3) {
+                            System.out.println("PLACE_DINE_IN_ORDER command received with incorrect number of arguments");
+                            return "Error usage: PLACE_DINE_IN_ORDER <numCustomers> <1> <item1> <item2> <2> <item1> <item2> <item 3> ... (up to 4 customers, 4 items each)";
+                        }
+
+                        int numCustomers;
+                        try {
+                            numCustomers = Integer.parseInt(parts[1]);
+                        } catch (NumberFormatException e) {
+                            return "Error: invalid number of customers";
+                        }
+
+                        if (numCustomers < 1 || numCustomers > 4) {
+                            return "Error: number of customers must be 1-4";
+                        }
+
+                        // Find available table with enough capacity
+                        int tableNumber = orderService.findAvailableTable(numCustomers);
+                        if (tableNumber == -1) {
+                            return "Error: no table available with capacity for " + numCustomers + " customers";
+                        }
+
+                        Order o = orderService.createDineInOrder(tableNumber);
+
+                        // Parse items per customer
+                        int i = 2;
+                        int currentCustomer = 0;
+                        while (i < parts.length) {
+                            if (parts[i].matches("\\d+")) {
+                                int custNum = Integer.parseInt(parts[i]);
+                                if (custNum < 1 || custNum > numCustomers) {
+                                    return "Error: invalid customer number " + custNum;
+                                }
+                                currentCustomer = custNum;
+                                i++;
+                            } else {
+                                if (currentCustomer == 0) {
+                                    return "Error: item without customer number";
+                                }
+                                String item = parts[i];
+                                if (!orderService.addOrderLine(o.getId(), item)) {
+                                    return "Error: invalid item '" + item + "'";
+                                }
+                                i++;
+                            }
+                        }
+
+                        return "Dine-in order placed for " + numCustomers + " customers at table " + tableNumber;
+                    } else {
+                        authenticated = false;
+                        System.out.println("Error: not authorized to place dine-in orders with " + userService.getRole(currentUser));
+                        return "ERROR: not authorized. Log into valid user account.";
+                    }
+
                 case "ADJUST_PRICE":
                     //only allow MANAGER role to adjust prices
                     if(userService.getRole(currentUser) == User.Role.MANAGER) {
@@ -283,8 +367,49 @@ public class RestaurantSession {
                         try {
                             int oid = Integer.parseInt(parts[1]);
                             boolean ok = orderService.notifyReady(oid);
-                            System.out.println("Notifying order " + oid + " ready: " + ok);
-                            return ok ? "OK notified" : "Error not found";
+                            return ok ? "OK notified" : "Error: order not found";
+                        } catch (Exception e) {
+                            System.out.println("Failed to parse order ID: " + parts[1]);
+                            return "Error invalid orderId";
+                        }
+
+                    case "CREATE_SHIPMENT":
+                        //only allow MANAGER to order new menu items
+                        if (userService.getRole(currentUser) != User.Role.MANAGER) {
+                            authenticated = false;
+                            return "ERROR: not authenticated. Log into valid user account.";
+                        }
+                        if (!authenticated) break;
+                        if (parts.length != 3) {
+                            return "Error usage: CREATE_SHIPMENT <item name> <amount>";
+                        }
+
+                        try {
+                            String itemName = parts[1];
+                            int amount = Integer.parseInt(parts[2]);
+                            int currentAmount = ds.getIngredientQuantity(itemName);
+                            boolean ok = ds.updateIngredientQuantity(itemName, currentAmount +amount);
+                            return ok ? "Ingredient quantity updated" : "Error: ingredient quantity not updated";
+                        } catch (Exception e) {
+                            System.out.println("Error: failed to parse amount: " + parts[2]);
+                            return "Error: invalid amount";
+                        }
+
+                    case "CUSTOMER_CHECKOUT":
+                        //only allow SERVER to checkout customers
+                        if (userService.getRole(currentUser) != User.Role.SERVER) {
+                            authenticated = false;
+                            return "ERROR: not authenticated. Log into valid user account.";
+                        }
+                        if (!authenticated) break;
+                        if (parts.length != 2) {
+                            return "Error usage: CUSTOMER_CHECKOUT <order_id>";
+                        }
+
+                        try {
+                            int oid = Integer.parseInt(parts[1]);
+                            boolean ok = orderService.checkoutOrder(oid);
+                            return ok ? "OK checked out" : "Error: order not ready or not found";
                         } catch (Exception e) {
                             System.out.println("Failed to parse order ID: " + parts[1]);
                             return "Error invalid orderId";
@@ -376,11 +501,11 @@ public class RestaurantSession {
     private String returnAvailableCommands(User.Role role) {
         switch (role) {
             case MANAGER:
-                return "Available commands: \n- LIST_MENU\n- ADJUST_PRICE <item> <new_price>\n- VIEW_STAFF\n- HIRE_EMPLOYEE <user> <pass> <role>\n- FIRE_EMPLOYEE <user>\n- AVAILABLE_COMMANDS\n- LOGOUT\n- EXIT";
+                return "Available commands: \n- LIST_MENU\n- CREATE_SHIPMENT <item name> <quantity>\n- ADJUST_PRICE <item> <new_price>\n- VIEW_STAFF\n- HIRE_EMPLOYEE <user> <pass> <role>\n- FIRE_EMPLOYEE <user>\n- AVAILABLE_COMMANDS\n- LOGOUT\n- EXIT";
             case SERVER:
-                return "Available commands: \n- LIST_MENU\n- LIST_ORDERS\n- PLACE_TAKEOUT_ORDER <customer_name> <item1> <item2> ...\n- PLACE_DINEIN_ORDER <table_number> <item1> <item2> ...\n- SHOW_BILL <order_id>\n- LOGOUT\n- EXIT";
+                return "Available commands: \n- LIST_MENU\n- LIST_ORDERS\n- PLACE_TAKEOUT_ORDER <customer_name> <item1> <item2> ...\n- PLACE_DINE_IN_ORDER <numCustomers> <1> <item1> <item2> <2> <item1> ... (up to 4 customers, 4 items each)\n- CUSTOMER_CHECKOUT <order_id>\n- SHOW_BILL <order_id>\n- AVAILABLE_COMMANDS\n- LOGOUT\n- EXIT";
             case CHEF:
-                return "Available commands: \n- LIST_ORDERS\n- NOTIFY_ORDER_READY <orderId>\n- VIEW_RECIPE <item_name>\n- LOGOUT\n- EXIT";
+                return "Available commands: \n- LIST_ORDERS\n- NOTIFY_ORDER_READY <orderId>\n- VIEW_RECIPE <item_name>\n- AVAILABLE_COMMANDS\n- LOGOUT\n- EXIT";
             default:
                 return "Error: unknown role";
         }

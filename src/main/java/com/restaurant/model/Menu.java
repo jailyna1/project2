@@ -16,6 +16,15 @@ public class Menu {
         return items.get(name);
     }
 
+    public MenuItem getItemIgnoreCase(String name) {
+        for (MenuItem item : items.values()) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public List<MenuItem> listAll() {
         return new ArrayList<>(items.values());
     }

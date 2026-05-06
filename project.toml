@@ -2,5 +2,5 @@
 id = "restaurant-project"
 
 [[build.env]]
-name = "BP_JAVA_APP_JAR"
-value = "target/restaurant-project-1.0-SNAPSHOT.jar"
+name = "GOOGLE_ENTRYPOINT"
+value = "java -cp target/restaurant-project-1.0-SNAPSHOT.jar com.restaurant.server.RestaurantGrpcServer"

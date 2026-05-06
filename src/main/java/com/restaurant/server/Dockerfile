@@ -1,6 +1,11 @@
+# Stage 1: Get Envoy binary
 FROM envoyproxy/envoy:v1.29-latest as envoy
 
+# Stage 2: Java runtime + Envoy
 FROM eclipse-temurin:17-jre
+
+# Copy Envoy binary from stage 1
+COPY --from=envoy /usr/local/bin/envoy /usr/local/bin/envoy
 
 # Copy your server JAR
 COPY server/target/restaurant-project-1.0-SNAPSHOT.jar /app/server.jar

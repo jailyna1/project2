@@ -21,27 +21,30 @@ static_resources:
                         - match: { prefix: "/" }
                           route:
                             cluster: cloudrun_backend
+                            host_rewrite_literal: project2-149659201433.us-central1.run.app
                 http_filters:
                   - name: envoy.filters.http.grpc_web
                   - name: envoy.filters.http.router
 
   clusters:
-  - name: cloudrun_backend
-    connect_timeout: 5s
-    type: logical_dns
-    lb_policy: round_robin
-    http2_protocol_options: {}
-    load_assignment:
-      cluster_name: cloudrun_backend
-      endpoints:
-        - lb_endpoints:
-            - endpoint:
-                address:
-                  socket_address:
-                    address: project2-149659201433.us-central1.run.app
-                    port_value: 443
-    transport_socket:
-      name: envoy.transport_sockets.tls
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
-        sni: project2-149659201433.us-central1.run.app
+    - name: cloudrun_backend
+      connect_timeout: 5s
+      type: logical_dns
+      lb_policy: round_robin
+      http2_protocol_options: {}
+      load_assignment:
+        cluster_name: cloudrun_backend
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: project2-149659201433.us-central1.run.app
+                      port_value: 443
+      transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+          sni: project2-149659201433.us-central1.run.app
+          common_tls_context:
+            alpn_protocols: ["h2"]

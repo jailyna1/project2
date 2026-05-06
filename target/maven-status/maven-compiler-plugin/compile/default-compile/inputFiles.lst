@@ -5,7 +5,6 @@ C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListOrdersResponse.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListOrdersResponseOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\OrderType.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\ServerGrpcImpl.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\CommandResponse.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\OrderLine.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ShowBillResponse.java
@@ -13,7 +12,6 @@ C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\grpc-
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListMenuResponseOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\PlaceDineinOrderRequestOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\CommandRequest.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\ServerSession.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\Table.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\MenuItemMessageOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\PlaceTakeoutOrderResponse.java
@@ -36,12 +34,12 @@ C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\Ingr
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListOrdersRequestOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\service\UserService.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\PlaceDineinOrderResponseOrBuilder.java
+C:\Users\jaily\Documents\ECE470\project2\src\main\java\RestaurantWeb.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\Menu.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\PlaceTakeoutOrderRequestOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\grpc-java\com\restaurant\grpc\generated\ManagerServiceGrpc.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListMenuRequest.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListMenuResponse.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\ManagerSession.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\AdjustPriceRequestOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ListMenuRequestOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\AdjustPriceRequest.java
@@ -51,7 +49,6 @@ C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\OrderStatus.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\GenericResponse.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\ShowBillRequestOrBuilder.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\ManagerGrpcImpl.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\PlaceDineinOrderRequest.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\model\MenuCategory.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\grpc-java\com\restaurant\grpc\generated\CommandServiceGrpc.java
@@ -66,6 +63,5 @@ C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\RestaurantSession.java
 C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\client\RestaurantGrpcClient.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\GuestOrder.java
-C:\Users\jaily\Documents\ECE470\project2\src\main\java\com\restaurant\server\ClientHandler.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\GenericResponseOrBuilder.java
 C:\Users\jaily\Documents\ECE470\project2\target\generated-sources\protobuf\java\com\restaurant\grpc\generated\LoginResponseOrBuilder.java

@@ -15,7 +15,7 @@ COPY target/restaurant-project-1.0-SNAPSHOT.jar /app/server.jar
 COPY envoy/envoy.yaml /etc/envoy/envoy.yaml
 
 # Expose Envoy port (Cloud Run listens here)
-EXPOSE 8080
+EXPOSE 5000
 
 # Start both Envoy and your Java server
 CMD ["sh", "-c", "java -jar /app/server.jar & envoy -c /etc/envoy/envoy.yaml"]

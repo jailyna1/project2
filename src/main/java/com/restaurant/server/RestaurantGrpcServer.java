@@ -71,11 +71,9 @@ public class RestaurantGrpcServer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        int port = 5000;  
-        if (args.length > 0) {
-            port = Integer.parseInt(args[0]);
-        }
-
+        String portEnv = System.getenv("PORT");
+        int port = (portEnv != null) ? Integer.parseInt(portEnv) : 8080;
+    
         RestaurantGrpcServer server = new RestaurantGrpcServer(port);
         server.start();
         server.blockUntilShutdown();

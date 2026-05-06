@@ -1,0 +1,6 @@
+[project]
+id = "restaurant-project"
+
+[[build.env]]
+name = "BP_JAVA_MAIN_CLASS"
+value = "com.restaurant.server.RestaurantGrpcServer"

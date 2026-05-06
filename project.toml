@@ -2,5 +2,5 @@
 id = "restaurant-project"
 
 [[build.env]]
-name = "BP_JAVA_MAIN_CLASS"
-value = "com.restaurant.server.RestaurantGrpcServer"
+name = "BP_JAVA_APP_JAR"
+value = "target/restaurant-project-1.0-SNAPSHOT.jar"
